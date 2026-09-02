@@ -2,10 +2,10 @@
 //Reference Types  1.Object 2.Array 3.Function 4.Data 
 
 //NaN ("Not a Number")
-console.log(typeof NaN);
-console.log(typeof 0/0);
-console.log(NaN === NaN);
-console.log(Number.isNaN(NaN));
+console.log(typeof NaN); //number
+console.log(typeof 0/0); //nan
+console.log(NaN === NaN); //false
+console.log(Number.isNaN(NaN)); //right way to check nan
 
 //Truthy vs Falsy
 //falsy values (only 8 in js) 1.false 2.0 3.-0 4."" 5.null 6.undefined 7.NaN 8.n(Bignit)
@@ -79,5 +79,5 @@ var c =1;
 var d = 1;
 console.log(c-d)   //0 because - have only 1 mode is subtsaction
 
-console.log("1"+2+2) //123
-console.log(1+2+"2")//32
+console.log("1"+2+3) //123
+console.log(1+2+"3")//32
