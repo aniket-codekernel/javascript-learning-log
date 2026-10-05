@@ -1,0 +1,194 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}</style><style>:root{color-scheme:light dark;--md-bg:#fff;--md-text:rgba(0,0,0,.8);--md-muted:rgba(0,0,0,.6);--md-fill:rgba(0,0,0,.04);--md-fill-strong:rgba(0,0,0,.06);--md-rule:rgba(0,0,0,.1);--md-rule-strong:rgba(0,0,0,.16);--md-link:hsl(210 100% 45%)}@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){--md-bg:#0d0d0d;--md-text:rgba(255,255,255,.85);--md-muted:rgba(255,255,255,.6);--md-fill:rgba(255,255,255,.06);--md-fill-strong:rgba(255,255,255,.09);--md-rule:rgba(255,255,255,.14);--md-rule-strong:rgba(255,255,255,.22);--md-link:hsl(210 100% 72%)}}:root[data-theme="dark"]{color-scheme:dark;--md-bg:#0d0d0d;--md-text:rgba(255,255,255,.85);--md-muted:rgba(255,255,255,.6);--md-fill:rgba(255,255,255,.06);--md-fill-strong:rgba(255,255,255,.09);--md-rule:rgba(255,255,255,.14);--md-rule-strong:rgba(255,255,255,.22);--md-link:hsl(210 100% 72%)}:root[data-theme="light"]{color-scheme:light}@media print{:root,:root[data-theme="dark"]{color-scheme:light;--md-bg:#fff;--md-text:rgba(0,0,0,.8);--md-muted:rgba(0,0,0,.6);--md-fill:rgba(0,0,0,.04);--md-fill-strong:rgba(0,0,0,.06);--md-rule:rgba(0,0,0,.1);--md-rule-strong:rgba(0,0,0,.16);--md-link:hsl(210 100% 45%)}}body{background:var(--md-bg);color:var(--md-text);max-width:720px;margin:0 auto;padding:32px;display:flex;flex-direction:column;gap:10px;font:14px/1.55 -apple-system,BlinkMacSystemFont,'SF Pro','Segoe UI',sans-serif;overflow-wrap:break-word}body>:first-child{margin-top:0}h1,h2,h3,h4,h5,h6{margin:6px 0 0;line-height:1.25;font-weight:600;text-wrap:balance}h1{font-size:1.35em}h2{font-size:1.15em;color:var(--md-muted)}h3,h4,h5,h6{font-size:1em}p,ul,ol,blockquote,table,pre,hr{margin:0}strong{font-weight:600}a{color:var(--md-link);text-decoration:none}a:hover{text-decoration:underline}ul,ol{display:flex;flex-direction:column;gap:6px;padding-left:22px}ul{list-style:disc}ol{list-style:decimal}:is(li,td,th)>*+:is(p,ul,ol,blockquote){margin-top:6px}blockquote{display:flex;flex-direction:column;gap:10px;border-left:2px solid var(--md-rule);padding-left:10px;color:var(--md-muted)}:not(pre)>code{background:var(--md-fill);padding:1px 3px;border-radius:4px;font:.92em 'SF Mono',ui-monospace,Menlo,Consolas,monospace}a>code{background:none;color:inherit}pre{background:var(--md-fill);padding:10px 12px;border-radius:6px;overflow-x:auto;font:12px/1.5 'SF Mono',ui-monospace,Menlo,Consolas,monospace;margin-block:4px}pre code{background:none;padding:0;font:inherit}table{width:100%;border-collapse:separate;border-spacing:2px;font:inherit}th,td{padding:6px 8px;border-radius:3px;text-align:left;vertical-align:top}th{background:var(--md-fill-strong);font-weight:600}td{background:var(--md-fill)}:is(th,td) :not(pre)>code{background:transparent}hr{border:0;border-top:1px solid var(--md-rule-strong);margin-block:10px}img{max-width:100%;height:auto;border-radius:4px}</style>
+</head><body>
+<h1>Chapter 6, Section D: Return Values — Implicit vs Explicit Return</h1>
+<hr>
+<h2>1. What <code>return</code> does</h2>
+<p><code>return</code> sends a value <strong>out</strong> of a function, back to wherever it was called. The moment <code>return</code> runs, the function <strong>stops immediately</strong> — nothing written after it runs.</p>
+<pre><code class="language-javascript">function add(a, b) {
+  return a + b;
+  console.log(&#34;this never runs&#34;); // unreachable
+}
+
+const result = add(2, 3);
+console.log(result); // 5
+</code></pre>
+<hr>
+<h2>2. No <code>return</code> → <code>undefined</code></h2>
+<pre><code class="language-javascript">function greet(name) {
+  console.log(`Hi, ${name}`);
+  // no return
+}
+
+const result = greet(&#34;Aniket&#34;); // prints &#34;Hi, Aniket&#34;
+console.log(result);            // undefined
+</code></pre>
+<p><code>console.log</code> only <strong>prints to the screen</strong> — it does not hand a value back to the caller. Without <code>return</code>, the function still runs fully, but whatever called it receives <code>undefined</code>.</p>
+<p><strong>Key distinction:</strong> <code>return</code> and <code>console.log</code> are unrelated jobs.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>console.log(x)</code></td>
+<td>Shows <code>x</code> on the screen (for you, the developer)</td>
+</tr>
+<tr>
+<td><code>return x</code></td>
+<td>Sends <code>x</code> back to the caller (for the code to use)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>3. Explicit return</h2>
+<p>Used in:</p>
+<ul>
+<li>all regular functions</li>
+<li>arrow functions that use <code>{ }</code></li>
+</ul>
+<pre><code class="language-javascript">function square(n) {
+  return n * n;
+}
+
+const square2 = (n) =&gt; {
+  return n * n;
+};
+</code></pre>
+<p>You write the word <code>return</code> yourself. <strong>Required</strong> whenever the function body is wrapped in <code>{ }</code>.</p>
+<hr>
+<h2>4. Implicit return (arrow functions only)</h2>
+<pre><code class="language-javascript">const square = n =&gt; n * n;
+</code></pre>
+<p>No <code>{ }</code>, no <code>return</code> keyword. The value of the single expression is automatically sent back.</p>
+<h3>Rule: implicit return only works when —</h3>
+<ol>
+<li>there are <strong>no curly braces</strong>, and</li>
+<li>the function body is a <strong>single expression</strong></li>
+</ol>
+<pre><code class="language-javascript">const double  = n =&gt; n * 2;       // ✅ implicit return, works
+
+const double2 = n =&gt; { n * 2; };  // ❌ braces added, but no &#34;return&#34; written
+                                   //     → returns undefined
+</code></pre>
+<p><strong>Common bug:</strong> adding <code>{ }</code> &quot;just to be safe&quot; silently turns off implicit return. If you add braces, you must add <code>return</code>.</p>
+<hr>
+<h2>5. Returning an object with implicit return — the parentheses trap</h2>
+<pre><code class="language-javascript">const makeUser = (name) =&gt; { name: name };
+makeUser(&#34;Aniket&#34;); // ❌ undefined (or syntax error)
+</code></pre>
+<p><strong>Why it breaks:</strong> right after <code>=&gt;</code>, JavaScript sees <code>{ ... }</code> and assumes it's a <strong>function body block</strong>, not an object. Inside that assumed block, <code>name: name</code> looks like a label, not a key-value pair — so nothing is returned.</p>
+<h3>Fix: wrap the object in parentheses</h3>
+<pre><code class="language-javascript">const makeUser = (name) =&gt; ({ name: name });
+makeUser(&#34;Aniket&#34;); // { name: &#34;Aniket&#34; }
+</code></pre>
+<p>The <code>( )</code> tells JavaScript: &quot;what follows is an expression (a value, like an object), not a function body.&quot; This is the standard fix — memorize it.</p>
+<hr>
+<h2>6. Returning early (multiple <code>return</code> statements)</h2>
+<p>A function can contain several <code>return</code> statements. Only the <strong>first one reached</strong> runs; the rest are skipped.</p>
+<pre><code class="language-javascript">function checkAge(age) {
+  if (age &lt; 0)  return &#34;Invalid age&#34;;
+  if (age &lt; 18) return &#34;Minor&#34;;
+  return &#34;Adult&#34;;
+}
+
+checkAge(15); // &#34;Minor&#34; — stops here, the last line never runs
+</code></pre>
+<hr>
+<h2>7. <code>return</code> with no value</h2>
+<pre><code class="language-javascript">function logIfPositive(n) {
+  if (n &lt; 0) return;   // exits early, gives back undefined
+  console.log(n);
+}
+</code></pre>
+<p><code>return;</code> alone (nothing after it) just <strong>stops the function</strong> and hands back <code>undefined</code>. This pattern is called a <strong>guard clause</strong> — used to exit early instead of nesting more <code>if</code> blocks.</p>
+<hr>
+<h2>8. Comparison table</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Explicit return</th>
+<th>Implicit return</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Keyword <code>return</code> needed?</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Braces <code>{ }</code> needed?</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Works in regular functions?</td>
+<td>Yes</td>
+<td>No — regular functions always need explicit <code>return</code></td>
+</tr>
+<tr>
+<td>Works in arrow functions?</td>
+<td>Yes</td>
+<td>Yes, only when there are no braces</td>
+</tr>
+<tr>
+<td>Returning an object directly</td>
+<td><code>return { a: 1 };</code></td>
+<td><code>({ a: 1 })</code> — needs wrapping parentheses</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>9. Common mistakes</h2>
+<ol>
+<li>Confusing <code>console.log</code> with <code>return</code> — logging does not send a value to the caller.</li>
+<li>Adding <code>{ }</code> to an arrow function without adding <code>return</code> — silently gives <code>undefined</code>.</li>
+<li>Trying to implicitly return an object without wrapping it in <code>( )</code>.</li>
+<li>Writing code after a <code>return</code> statement, expecting it to run — it's unreachable.</li>
+<li>Forgetting that a function with no <code>return</code> still runs completely; it just gives back <code>undefined</code> at the end.</li>
+</ol>
+<hr>
+<h2>10. Practice questions</h2>
+<p><strong>Q1</strong></p>
+<pre><code class="language-javascript">function test() {
+  console.log(&#34;hello&#34;);
+}
+const r = test();
+console.log(r);
+</code></pre>
+<p><strong>Answer:</strong> prints <code>hello</code>, then <code>undefined</code>. No <code>return</code>, so <code>r</code> is <code>undefined</code>.</p>
+<p><strong>Q2</strong></p>
+<pre><code class="language-javascript">const getUser = () =&gt; { id: 1, name: &#34;Aniket&#34; };
+console.log(getUser());
+</code></pre>
+<p><strong>Answer:</strong> <code>undefined</code>. The <code>{ }</code> after <code>=&gt;</code> is read as a function body block, not an object. <code>id: 1</code> is treated as a label, and nothing is returned.</p>
+<p><strong>Q3</strong></p>
+<pre><code class="language-javascript">const getUser = () =&gt; ({ id: 1, name: &#34;Aniket&#34; });
+console.log(getUser());
+</code></pre>
+<p><strong>Answer:</strong> <code>{ id: 1, name: &quot;Aniket&quot; }</code>. The parentheses mark it as an object expression, so it's implicitly returned.</p>
+<p><strong>Q4</strong></p>
+<pre><code class="language-javascript">function checkNum(n) {
+  if (n &gt; 0) return &#34;positive&#34;;
+  if (n &lt; 0) return &#34;negative&#34;;
+  return &#34;zero&#34;;
+}
+console.log(checkNum(0));
+</code></pre>
+<p><strong>Answer:</strong> <code>&quot;zero&quot;</code>. Both <code>if</code> conditions are false, so execution falls through to the final <code>return</code>.</p>
+<hr>
+<h2>11. Summary (memorize this)</h2>
+<ul>
+<li><code>return</code> sends a value back to the caller and <strong>stops the function immediately</strong>.</li>
+<li>No <code>return</code> → the caller gets <code>undefined</code>, even though the function still ran.</li>
+<li><code>console.log</code> and <code>return</code> do different jobs — logging is not returning.</li>
+<li><strong>Explicit return</strong>: needed whenever <code>{ }</code> is used (all regular functions, and arrow functions with braces).</li>
+<li><strong>Implicit return</strong>: only in arrow functions with no braces and a single expression.</li>
+<li>Returning an object implicitly needs wrapping parentheses: <code>() =&gt; ({ ... })</code>.</li>
+</ul>
+
+</body></html>

@@ -1,0 +1,382 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}</style><style>:root{color-scheme:light dark;--md-bg:#fff;--md-text:rgba(0,0,0,.8);--md-muted:rgba(0,0,0,.6);--md-fill:rgba(0,0,0,.04);--md-fill-strong:rgba(0,0,0,.06);--md-rule:rgba(0,0,0,.1);--md-rule-strong:rgba(0,0,0,.16);--md-link:hsl(210 100% 45%)}@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){--md-bg:#0d0d0d;--md-text:rgba(255,255,255,.85);--md-muted:rgba(255,255,255,.6);--md-fill:rgba(255,255,255,.06);--md-fill-strong:rgba(255,255,255,.09);--md-rule:rgba(255,255,255,.14);--md-rule-strong:rgba(255,255,255,.22);--md-link:hsl(210 100% 72%)}}:root[data-theme="dark"]{color-scheme:dark;--md-bg:#0d0d0d;--md-text:rgba(255,255,255,.85);--md-muted:rgba(255,255,255,.6);--md-fill:rgba(255,255,255,.06);--md-fill-strong:rgba(255,255,255,.09);--md-rule:rgba(255,255,255,.14);--md-rule-strong:rgba(255,255,255,.22);--md-link:hsl(210 100% 72%)}:root[data-theme="light"]{color-scheme:light}@media print{:root,:root[data-theme="dark"]{color-scheme:light;--md-bg:#fff;--md-text:rgba(0,0,0,.8);--md-muted:rgba(0,0,0,.6);--md-fill:rgba(0,0,0,.04);--md-fill-strong:rgba(0,0,0,.06);--md-rule:rgba(0,0,0,.1);--md-rule-strong:rgba(0,0,0,.16);--md-link:hsl(210 100% 45%)}}body{background:var(--md-bg);color:var(--md-text);max-width:720px;margin:0 auto;padding:32px;display:flex;flex-direction:column;gap:10px;font:14px/1.55 -apple-system,BlinkMacSystemFont,'SF Pro','Segoe UI',sans-serif;overflow-wrap:break-word}body>:first-child{margin-top:0}h1,h2,h3,h4,h5,h6{margin:6px 0 0;line-height:1.25;font-weight:600;text-wrap:balance}h1{font-size:1.35em}h2{font-size:1.15em;color:var(--md-muted)}h3,h4,h5,h6{font-size:1em}p,ul,ol,blockquote,table,pre,hr{margin:0}strong{font-weight:600}a{color:var(--md-link);text-decoration:none}a:hover{text-decoration:underline}ul,ol{display:flex;flex-direction:column;gap:6px;padding-left:22px}ul{list-style:disc}ol{list-style:decimal}:is(li,td,th)>*+:is(p,ul,ol,blockquote){margin-top:6px}blockquote{display:flex;flex-direction:column;gap:10px;border-left:2px solid var(--md-rule);padding-left:10px;color:var(--md-muted)}:not(pre)>code{background:var(--md-fill);padding:1px 3px;border-radius:4px;font:.92em 'SF Mono',ui-monospace,Menlo,Consolas,monospace}a>code{background:none;color:inherit}pre{background:var(--md-fill);padding:10px 12px;border-radius:6px;overflow-x:auto;font:12px/1.5 'SF Mono',ui-monospace,Menlo,Consolas,monospace;margin-block:4px}pre code{background:none;padding:0;font:inherit}table{width:100%;border-collapse:separate;border-spacing:2px;font:inherit}th,td{padding:6px 8px;border-radius:3px;text-align:left;vertical-align:top}th{background:var(--md-fill-strong);font-weight:600}td{background:var(--md-fill)}:is(th,td) :not(pre)>code{background:transparent}hr{border:0;border-top:1px solid var(--md-rule-strong);margin-block:10px}img{max-width:100%;height:auto;border-radius:4px}</style>
+</head><body>
+<h1>Chapter 6, Section C: Arrow Functions vs Regular Functions</h1>
+<p>Syntax and <code>this</code> behavior, explained point by point.</p>
+<hr>
+<h2>1. What is this section about?</h2>
+<p>JavaScript has two main ways to write a function: the <strong>regular function</strong> (<code>function</code>) and the <strong>arrow function</strong> (<code>=&gt;</code>). They look different, but the real difference is how they treat <strong><code>this</code></strong>.</p>
+<ul>
+<li>Regular function: <code>this</code> is decided <strong>when the function is called</strong>.</li>
+<li>Arrow function: <code>this</code> is decided <strong>where the function is written</strong>.</li>
+</ul>
+<p>Everything below explains that one sentence.</p>
+<hr>
+<h2>2. Syntax</h2>
+<h3>Regular function</h3>
+<pre><code class="language-javascript">function add(a, b) {
+  return a + b;
+}
+
+const add2 = function (a, b) {   // function expression
+  return a + b;
+};
+</code></pre>
+<h3>Arrow function</h3>
+<pre><code class="language-javascript">// full form
+const add = (a, b) =&gt; {
+  return a + b;
+};
+
+// implicit return: one expression, no braces, no &#34;return&#34; word
+const add = (a, b) =&gt; a + b;
+
+// one parameter: parentheses optional
+const square = n =&gt; n * n;
+
+// no parameters: empty parentheses required
+const hi = () =&gt; console.log(&#34;hi&#34;);
+</code></pre>
+<h3>Syntax rules to remember</h3>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Body has braces <code>{ }</code></td>
+<td>You must write <code>return</code> yourself</td>
+</tr>
+<tr>
+<td>Body has no braces</td>
+<td>The value is returned automatically</td>
+</tr>
+<tr>
+<td>One parameter</td>
+<td><code>n =&gt; ...</code> is allowed</td>
+</tr>
+<tr>
+<td>Zero or 2+ parameters</td>
+<td>Parentheses are required</td>
+</tr>
+<tr>
+<td>Returning an object directly</td>
+<td>Wrap it in parentheses: <code>() =&gt; ({ a: 1 })</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>3. What is <code>this</code>?</h2>
+<ul>
+<li><code>this</code> is a special keyword. It is <strong>not</strong> a variable you declare.</li>
+<li>JavaScript sets it automatically for functions.</li>
+<li>It answers the question: <strong>&quot;which object is this function working with right now?&quot;</strong></li>
+</ul>
+<p><strong>Analogy:</strong> the word &quot;I&quot;. It never changes, but who it means depends on who is speaking. <code>this</code> is the same: the word is fixed, but what it points to depends on who is &quot;calling&quot;.</p>
+<h3>Why does JavaScript have <code>this</code>?</h3>
+<p>So <strong>one function can be shared by many objects</strong>.</p>
+<pre><code class="language-javascript">function greet() {
+  console.log(&#34;Hi, I am &#34; + this.name);
+}
+
+const p1 = { name: &#34;Aniket&#34;, greet: greet };
+const p2 = { name: &#34;Rahul&#34;,  greet: greet };
+
+p1.greet();  // Hi, I am Aniket
+p2.greet();  // Hi, I am Rahul
+</code></pre>
+<p>Write the function once, use it for any number of objects. A function does not belong to one object, so it cannot know who is using it until it is <strong>called</strong>. That is why <code>this</code> is decided at call time for regular functions.</p>
+<hr>
+<h2>4. Regular functions: dynamic <code>this</code></h2>
+<h3>The main rule</h3>
+<p><code>this</code> = the object <strong>written immediately before the dot</strong> when the function is called.</p>
+<pre><code class="language-javascript">const person = {
+  name: &#34;Aniket&#34;,
+  greet: function () {
+    console.log(this.name);
+  }
+};
+
+person.greet();   // person is before the dot, so this = person, prints &#34;Aniket&#34;
+</code></pre>
+<h3>Detached call</h3>
+<pre><code class="language-javascript">const detached = person.greet;
+detached();       // nothing before the dot, so this is NOT person
+</code></pre>
+<ul>
+<li>Non-strict mode: <code>this</code> = the global object (<code>window</code> in browsers), so <code>this.name</code> is <code>undefined</code> (or <code>&quot;&quot;</code> in a browser).</li>
+<li>Strict mode or modules: <code>this</code> = <code>undefined</code>, and <code>this.name</code> throws an error.</li>
+</ul>
+<p>The function is the same in both calls. <strong>Only the call changed</strong>, and for regular functions the call decides <code>this</code>.</p>
+<h3>Important facts</h3>
+<ul>
+<li>The <strong>key name</strong> (<code>greet</code>, <code>hello</code>, anything) does not affect <code>this</code>. You just call it by that key.</li>
+<li>The <strong>way you write the function</strong> in the object (<code>greet: function(){}</code> or shorthand <code>greet(){}</code>) does not affect <code>this</code> either.</li>
+<li>Only the <strong>call</strong> matters: <code>object.key()</code>.</li>
+<li>Calling with <code>new</code> (constructor) sets <code>this</code> to the brand-new object.</li>
+<li><code>.call()</code>, <code>.apply()</code>, <code>.bind()</code> can set <code>this</code> manually (Section I).</li>
+</ul>
+<h3><code>return</code> is unrelated to <code>this</code></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Job</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>return</code></td>
+<td>Sends a value <strong>out</strong> of the function</td>
+</tr>
+<tr>
+<td><code>this</code></td>
+<td>Says <strong>who is calling</strong> the function</td>
+</tr>
+</tbody>
+</table>
+<p><code>console.log</code> prints without needing <code>return</code>. A missing <code>return</code> never causes <code>this</code> problems.</p>
+<hr>
+<h2>5. Arrow functions: lexical <code>this</code></h2>
+<h3>The main rule</h3>
+<p>An arrow function has <strong>no <code>this</code> of its own</strong>. It uses the <code>this</code> of the code <strong>around where it was written</strong>.</p>
+<p>&quot;Lexical&quot; means &quot;based on where it is written in the code.&quot;</p>
+<h3>The borrowing rule</h3>
+<p>Look outward from the arrow function until you find a <strong>regular function</strong>. Borrow that function's <code>this</code>. If there is none, use the top-level <code>this</code>.</p>
+<p><strong>An object <code>{ }</code> does not count.</strong> Only functions have a <code>this</code> to lend.</p>
+<p><strong>Analogy:</strong> an arrow function has no phone. It borrows the phone of the room it was written in. Once written, it never changes rooms.</p>
+<h3>Example A: arrow directly in an object (does NOT work)</h3>
+<pre><code class="language-javascript">const person = {
+  name: &#34;Aniket&#34;,
+  greet: () =&gt; {
+    console.log(this.name);
+  }
+};
+
+person.greet();   // undefined
+</code></pre>
+<p>Why:</p>
+<ol>
+<li>Around the arrow is the object <code>{ }</code>. Objects give no <code>this</code>.</li>
+<li>Around the object is the top of the file, with no function.</li>
+<li>So the arrow uses the <strong>top-level <code>this</code></strong>, which is not <code>person</code>.
+<ul>
+<li>Node.js: <code>{}</code> (empty object)</li>
+<li>Browser: <code>window</code></li>
+</ul>
+</li>
+<li><code>this.name</code> is not <code>&quot;Aniket&quot;</code>, so the output is <code>undefined</code>.</li>
+</ol>
+<p>The phone is not missing. It is the <strong>wrong phone</strong>.</p>
+<h3>Example B: arrow inside a regular function (WORKS)</h3>
+<pre><code class="language-javascript">const person = {
+  name: &#34;Aniket&#34;,
+  start: function () {
+    const inner = () =&gt; {
+      console.log(this.name);
+    };
+    inner();
+  }
+};
+
+person.start();   // Aniket
+</code></pre>
+<p>Why:</p>
+<ol>
+<li><code>inner</code> is an arrow, written inside <code>start</code>.</li>
+<li><code>start</code> is a regular function, so it has a <code>this</code>.</li>
+<li><code>start</code> was called as <code>person.start()</code>, so its <code>this</code> = <code>person</code>.</li>
+<li><code>inner</code> borrows it, so <code>this.name</code> is <code>&quot;Aniket&quot;</code>.</li>
+</ol>
+<p>The same arrow syntax gives a different result. <strong>What surrounds it</strong> decides.</p>
+<h3>Arrow <code>this</code> is fixed forever</h3>
+<pre><code class="language-javascript">const detachedArrow = person.greet;   // arrow from Example A
+detachedArrow();                      // still undefined
+</code></pre>
+<ul>
+<li>The call is <strong>ignored</strong> by arrow functions.</li>
+<li><code>this</code> was settled <strong>once, at writing time</strong>.</li>
+<li><code>.call()</code>, <code>.apply()</code>, <code>.bind()</code> cannot change an arrow's <code>this</code>.</li>
+</ul>
+<hr>
+<h2>6. Why were arrow functions created? The setTimeout problem</h2>
+<h3>The problem with a regular function inside</h3>
+<pre><code class="language-javascript">const timer = {
+  seconds: 0,
+  start: function () {
+    setTimeout(function () {
+      this.seconds++;               // wrong &#34;this&#34;
+      console.log(this.seconds);    // NaN in a browser
+    }, 1000);
+  }
+};
+timer.start();
+</code></pre>
+<ul>
+<li><code>timer.start()</code> gives <code>start</code> the right <code>this</code> (<code>timer</code>).</li>
+<li>But the <strong>inner</strong> function is called later <strong>by JavaScript itself</strong>, with nothing before the dot.</li>
+<li>So the inner function's <code>this</code> is <strong>not</strong> <code>timer</code>.</li>
+</ul>
+<h3>The fix: arrow function</h3>
+<pre><code class="language-javascript">const timer = {
+  seconds: 0,
+  start: function () {
+    setTimeout(() =&gt; {
+      this.seconds++;
+      console.log(this.seconds);    // 1
+    }, 1000);
+  }
+};
+timer.start();
+</code></pre>
+<ul>
+<li>The arrow is written inside <code>start</code>, so it borrows <code>start</code>'s <code>this</code> (= <code>timer</code>).</li>
+<li>It doesn't care that JavaScript calls it later with nothing in front.</li>
+</ul>
+<p>This is the main real-world reason arrow functions exist: <strong>callbacks inside methods keep the outer <code>this</code></strong>.</p>
+<hr>
+<h2>7. Other differences (beyond <code>this</code>)</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Regular function</th>
+<th>Arrow function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Own <code>this</code></td>
+<td>Yes (dynamic)</td>
+<td>No (lexical)</td>
+</tr>
+<tr>
+<td><code>arguments</code> object</td>
+<td>Yes</td>
+<td>No, use rest params <code>(...args)</code></td>
+</tr>
+<tr>
+<td>Use with <code>new</code> (constructor)</td>
+<td>Yes</td>
+<td>No, throws an error</td>
+</tr>
+<tr>
+<td>Hoisting</td>
+<td>Declarations are fully hoisted</td>
+<td>Not hoisted (behaves like a variable)</td>
+</tr>
+<tr>
+<td><code>.call/.apply/.bind</code> change <code>this</code></td>
+<td>Yes</td>
+<td>No (ignored)</td>
+</tr>
+<tr>
+<td>Good as an object method needing <code>this</code></td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Good as a short callback</td>
+<td>Okay</td>
+<td>Yes, best choice</td>
+</tr>
+<tr>
+<td>Implicit return shorthand</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h3><code>arguments</code> example</h3>
+<pre><code class="language-javascript">function regular() { console.log(arguments); }   // works
+const arrow = () =&gt; { console.log(arguments); }; // error, or picks up an outer function&#39;s arguments
+
+const arrow2 = (...args) =&gt; console.log(args);   // correct way in arrows
+</code></pre>
+<hr>
+<h2>8. When to use which</h2>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Object method that needs <code>this</code> to be the object</td>
+<td>Regular function (or shorthand method)</td>
+</tr>
+<tr>
+<td>Callback <strong>inside</strong> a method that needs the outer <code>this</code></td>
+<td>Arrow function</td>
+</tr>
+<tr>
+<td>Short callback like <code>arr.map(n =&gt; n * 2)</code></td>
+<td>Arrow function</td>
+</tr>
+<tr>
+<td>Constructor function (<code>new Foo()</code>)</td>
+<td>Regular function (or <code>class</code>)</td>
+</tr>
+<tr>
+<td>Standalone helper, no <code>this</code> involved</td>
+<td>Either, arrow is common</td>
+</tr>
+<tr>
+<td>Function that needs <code>arguments</code></td>
+<td>Regular function, or use rest params</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>9. Common mistakes</h2>
+<ol>
+<li><strong>Arrow function as an object method that uses <code>this</code>.</strong> It borrows the top-level <code>this</code>, not the object, so you get <code>undefined</code>.</li>
+<li><strong>Detaching a regular method</strong> (<code>const x = obj.method; x();</code>). <code>this</code> is lost because nothing is before the dot.</li>
+<li><strong>Calling a method by the wrong name.</strong> You call it by the <strong>key</strong>, not by the original function's name.</li>
+<li><strong>Thinking <code>return</code> affects <code>this</code>.</strong> They are unrelated.</li>
+<li><strong>Thinking an object <code>{ }</code> gives <code>this</code> to an arrow inside it.</strong> Only functions do.</li>
+<li><strong>Using <code>arguments</code> in an arrow function.</strong> Use rest parameters.</li>
+</ol>
+<hr>
+<h2>10. Practice questions (try before reading the answers)</h2>
+<p><strong>Q1</strong></p>
+<pre><code class="language-javascript">const car = { brand: &#34;Tata&#34;, show: function () { console.log(this.brand); } };
+car.show();
+</code></pre>
+<p><strong>Answer:</strong> <code>Tata</code>. <code>car</code> is before the dot, so <code>this</code> = <code>car</code>.</p>
+<p><strong>Q2</strong></p>
+<pre><code class="language-javascript">const x = car.show;
+x();
+</code></pre>
+<p><strong>Answer:</strong> <code>undefined</code>. Nothing is before the dot, so <code>this</code> is not <code>car</code>. (Not because of <code>return</code>.)</p>
+<p><strong>Q3</strong></p>
+<pre><code class="language-javascript">const car = {
+  brand: &#34;Tata&#34;,
+  show: function () {
+    const inner = () =&gt; console.log(this.brand);
+    inner();
+  }
+};
+car.show();
+</code></pre>
+<p><strong>Answer:</strong> <code>Tata</code>. <code>inner</code> borrows <code>show</code>'s <code>this</code>, and <code>show</code> was called as <code>car.show()</code>.</p>
+<p><strong>Q4</strong></p>
+<pre><code class="language-javascript">const car = { brand: &#34;Tata&#34;, show: () =&gt; console.log(this.brand) };
+car.show();
+</code></pre>
+<p><strong>Answer:</strong> <code>undefined</code>. The arrow is directly in an object, so it uses the top-level <code>this</code>.</p>
+<hr>
+<h2>11. Summary (memorize this)</h2>
+<ul>
+<li><strong>Regular function:</strong> <code>this</code> is decided by <strong>how it is called</strong>. It can change every time. Rule: object before the dot.</li>
+<li><strong>Arrow function:</strong> <code>this</code> is decided by <strong>where it is written</strong>. It never changes. Rule: borrow from the nearest surrounding regular function, or the top level.</li>
+<li><strong>Objects <code>{ }</code> do not give <code>this</code> to arrows. Only functions do.</strong></li>
+<li>Use <strong>regular functions</strong> for object methods, <strong>arrow functions</strong> for callbacks inside them.</li>
+<li><code>return</code> and <code>this</code> are two separate things.</li>
+</ul>
+
+</body></html>
